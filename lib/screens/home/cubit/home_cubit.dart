@@ -20,15 +20,23 @@ class HomeCubit extends Cubit<HomeState> {
     );
   }
 
-  Future<void> toggleCameraPermission() async {
-    final status = await Permission.camera.request();
-    debugPrint('$status');
-    emit(state.copyWith(isCameraPermissionGranted: status.isGranted));
+  Future<void> toggleCameraPermission({required bool newState}) async {
+    if (newState) {
+      final status = await Permission.camera.request();
+      debugPrint('$status');
+      emit(state.copyWith(isCameraPermissionGranted: status.isGranted));
+    } else {
+      emit(state.copyWith(isCameraPermissionGranted: newState));
+    }
   }
 
-  Future<void> toggleMicrophonePermission() async {
-    final status = await Permission.microphone.request();
-    debugPrint('$status');
-    emit(state.copyWith(isMicrophonePermissionGranted: status.isGranted));
+  Future<void> toggleMicrophonePermission({required bool newState}) async {
+    if (newState) {
+      final status = await Permission.microphone.request();
+      debugPrint('$status');
+      emit(state.copyWith(isMicrophonePermissionGranted: status.isGranted));
+    } else {
+      emit(state.copyWith(isMicrophonePermissionGranted: newState));
+    }
   }
 }
