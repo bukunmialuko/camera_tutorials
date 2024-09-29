@@ -28,29 +28,31 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-          child: BlocConsumer<HomeCubit, HomeState>(
-        listener: (context, state) {
-          if (state.isCameraPermissionGranted &&
-              state.isMicrophonePermissionGranted) {
-            debugPrint('');
-            context.goNamed('camera');
-          }
-        },
-        builder: (context, state) {
-          if (state.isCameraPermissionGranted == false ||
-              !state.isMicrophonePermissionGranted == false ||
-              state.status == StatsStatus.loading) {
+        child: BlocConsumer<HomeCubit, HomeState>(
+          listener: (context, state) {
+            if (state.isCameraPermissionGranted &&
+                state.isMicrophonePermissionGranted) {
+              context.goNamed('camera');
+            }
+          },
+          builder: (context, state) {
+            if (state.status == StatsStatus.loaded) {
+              if (state.isCameraPermissionGranted == false ||
+                  state.isMicrophonePermissionGranted == false) {
+                return _Permissions(
+                  isCameraPermissionGranted: state.isCameraPermissionGranted,
+                  isMicrophonePermissionGranted:
+                      state.isMicrophonePermissionGranted,
+                );
+              }
+            }
+
             return const Center(
               child: CircularProgressIndicator(),
             );
-          }
-
-          return _Permissions(
-            isCameraPermissionGranted: state.isCameraPermissionGranted,
-            isMicrophonePermissionGranted: state.isMicrophonePermissionGranted,
-          );
-        },
-      )),
+          },
+        ),
+      ),
     );
   }
 }
@@ -73,7 +75,9 @@ class _Permissions extends StatelessWidget {
           secondary: const Icon(Icons.camera),
           value: isCameraPermissionGranted,
           onChanged: (newState) async {
-            await context.read<HomeCubit>().toggleCameraPermission();
+            await context
+                .read<HomeCubit>()
+                .toggleCameraPermission(newState: newState);
           },
         ),
         SwitchListTile(
@@ -82,7 +86,9 @@ class _Permissions extends StatelessWidget {
           secondary: const Icon(Icons.mic),
           value: isMicrophonePermissionGranted,
           onChanged: (newState) async {
-            await context.read<HomeCubit>().toggleMicrophonePermission();
+            await context
+                .read<HomeCubit>()
+                .toggleMicrophonePermission(newState: newState);
           },
         )
       ],
