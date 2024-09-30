@@ -32,7 +32,8 @@ class _HomeViewState extends State<HomeView> {
           listener: (context, state) {
             if (state.isCameraPermissionGranted &&
                 state.isMicrophonePermissionGranted) {
-              context.goNamed('camera');
+              // context.goNamed('camera');
+              context.goNamed('pose_detection');
             }
           },
           builder: (context, state) {
