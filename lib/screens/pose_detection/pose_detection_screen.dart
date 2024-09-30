@@ -59,6 +59,8 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
       );
       _customPaint = CustomPaint(painter: painter);
     } else {
+      print('OBKM ===>');
+      print(poses[0].landmarks);
       _text = 'Poses found: ${poses.length}\n\n';
       // TODO: set _customPaint to draw landmarks on top of image
       _customPaint = null;
